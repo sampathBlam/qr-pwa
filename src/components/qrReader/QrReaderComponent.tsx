@@ -6,18 +6,21 @@ export interface QrReaderComponentProps{
 };
 
 const QrReaderComponent = ({onScanComplete, onScanError} : QrReaderComponentProps) => {
-
   return (
-    <QrReader
-      delay={300}
-      onError={(error)=>{
-        onScanError(error);
-      }}
-      onScan={(data)=>{
-        onScanComplete(data);
-      }}
-      >
-    </QrReader>
+    <div>
+      <QrReader
+        delay={300}
+        onError={(error)=>{
+          console.log(error);
+          onScanError(error);
+        }}
+        onScan={(data)=>{
+          console.log(data);
+          onScanComplete(data);
+        }}
+        >
+      </QrReader>
+    </div>
   )
 };
 
