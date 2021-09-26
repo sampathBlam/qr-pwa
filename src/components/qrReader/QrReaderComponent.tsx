@@ -1,4 +1,5 @@
 import QrReader from 'react-qr-reader';
+import 'components/qrReader/QrReaderComponent.css'
 
 export interface QrReaderComponentProps{
   onScanComplete: (data:string | null) => void;
@@ -7,7 +8,7 @@ export interface QrReaderComponentProps{
 
 const QrReaderComponent = ({onScanComplete, onScanError} : QrReaderComponentProps) => {
   return (
-    <div>
+    <div className="qrReaderDiv">
       <QrReader
         delay={300}
         onError={(error)=>{

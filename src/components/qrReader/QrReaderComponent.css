@@ -1,0 +1,12 @@
+.qrReaderDiv {
+  margin: auto;
+  width: 85vw;
+  height: 85vw;
+}
+
+@media screen and (min-width: 600px) {
+  .qrReaderDiv {
+    width: 70vh;
+    height: 70vh;
+  }
+}

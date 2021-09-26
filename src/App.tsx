@@ -1,27 +1,50 @@
 import { useState } from 'react';
 import './App.css';
+import { Row, Col } from 'antd';
 
 import QrReaderComponent from 'components/qrReader/QrReaderComponent';
-import QrResultComponent from 'components/qrResult/QrResultComponent';
+import QrResultComponent, { QrResultData } from 'components/qrResult/QrResultComponent';
 
 
 const App = () => {
-  const [scanData, setScanData] = useState<string | null>(null);
-  const [error, setError] = useState(null);
+  const [scanResult, setScanResult] = useState<QrResultData>();
+  const [error, setError] = useState<string>();
+
+  const isValidUrl = (data: string) => {
+    let url;
+    try {
+      url = new URL(data);
+    } catch (error) {
+      return false;
+    }
+    return true;
+  }
+
+  const onScanCompleted = (data: string | null) => {
+    if(data != null && data !== scanResult?.data){
+      setScanResult({
+        data,
+        isUrl: isValidUrl(data)
+      });
+    }
+  };
+
+  const onScanError = (error: any) => {
+    setError(error);
+  }
 
   return (
-    <div className="App">
-      <div className="QrReaderDiv">
+    <Row justify="center" style={{height: "100vh"}} align="middle">
+      <Col xs={24} sm={24} md={12}>
         <QrReaderComponent
-          onScanComplete = {(data: string | null) => {
-            setScanData(data);
-          }}
-          onScanError = {(error: any) => {
-            setError(error);
-          }}/>
-        <QrResultComponent data={scanData? scanData: ""} error={error? error+"": ""}/>
-      </div>
-    </div>
+          onScanComplete = {onScanCompleted}
+          onScanError = {onScanError}
+        />
+      </Col>
+      <Col xs={24} sm={24} md={12}>
+        <QrResultComponent qrResultData={scanResult} error={error}/>
+      </Col>
+    </Row>
   );
 }
 export default App;
