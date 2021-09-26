@@ -34,7 +34,7 @@ const App = () => {
   }
 
   return (
-    <Row justify="center" style={{height: "100vh"}} align="middle">
+    <Row justify="center" className="App" align="middle">
       <Col xs={24} sm={24} md={12}>
         <QrReaderComponent
           onScanComplete = {onScanCompleted}

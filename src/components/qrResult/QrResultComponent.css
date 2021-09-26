@@ -1,3 +1,18 @@
 .resultButton {
   width: 100%;
 }
+
+.resultTextDiv {
+  width: 100%;
+  border: black;
+  border-width: 1em;
+}
+
+.resultText {
+  border-style: solid;
+  border-width: 1px;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}

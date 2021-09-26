@@ -1,8 +1,8 @@
-import { Input, Button, Row, Col, Divider, message } from 'antd';
+import { Button, Row, Col, Typography, message } from 'antd';
 import { CopyFilled, CaretRightFilled } from '@ant-design/icons';
-
 import './QrResultComponent.css';
-const { TextArea } = Input;
+
+const { Title } = Typography;
 
 export interface QrResultData{
   data: string;
@@ -20,12 +20,11 @@ const QrResultComponent = ({qrResultData, error}: QrResultComponentProps) => {
     <>
       { qrResultData &&
         <>
-          <Row justify="center" align="middle">
-            <Col xs={16}>
-              <TextArea autoSize value={qrResultData.data}/>
+          <Row justify="center" align="middle" >
+            <Col xs={16} className="resultText">
+                <Title  level={5}>{qrResultData.data}</Title>
             </Col>  
           </Row>
-          <Divider/>
           <Row justify="center" align="middle" gutter={20}>
             <Col xs={8}>
               <Button size="large" icon={<CopyFilled />} className="resultButton" type="primary" onClick={
@@ -44,11 +43,12 @@ const QrResultComponent = ({qrResultData, error}: QrResultComponentProps) => {
                 }>Go To</Button>
               </Col> }
           </Row>
-        
         </>
       } 
       { error && (
-        <Input value={error}/>
+        <div className="resultText">
+          <Title  level={5}>{error}</Title>
+        </div>
       )}
     </>
   );
