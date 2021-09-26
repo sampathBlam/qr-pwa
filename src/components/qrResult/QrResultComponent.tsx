@@ -1,5 +1,6 @@
 import { Input, Button, Row, Col, Divider, message } from 'antd';
 import { CopyFilled, CaretRightFilled } from '@ant-design/icons';
+
 import './QrResultComponent.css';
 const { TextArea } = Input;
 
@@ -14,6 +15,7 @@ export interface QrResultComponentProps{
 }
 
 const QrResultComponent = ({qrResultData, error}: QrResultComponentProps) => {
+
   return (
     <>
       { qrResultData &&
@@ -35,7 +37,11 @@ const QrResultComponent = ({qrResultData, error}: QrResultComponentProps) => {
             </Col>
             { qrResultData.isUrl && 
               <Col xs={8}>
-                <Button size="large" icon={<CaretRightFilled />} className="resultButton" type="primary">Go To</Button>
+                <Button size="large" icon={<CaretRightFilled />} className="resultButton" type="primary" onClick={
+                  () => {
+                    window.location.href = qrResultData.data.trim();
+                  }
+                }>Go To</Button>
               </Col> }
           </Row>
         
