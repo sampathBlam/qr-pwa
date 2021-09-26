@@ -11,9 +11,8 @@ const App = () => {
   const [error, setError] = useState<string>();
 
   const isValidUrl = (data: string) => {
-    let url;
     try {
-      url = new URL(data);
+      new URL(data);
     } catch (error) {
       return false;
     }
