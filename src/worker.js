@@ -1,42 +1,53 @@
-var CACHE_NAME = 'qr-pwa';
-var urlsToCache = ['/'];
-
-// Install a service worker
-self.addEventListener('install', (event) => {
-  // Perform install steps
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(function (cache) {
-      console.log('Opened cache');
-      return cache.addAll(urlsToCache);
-    })
-  );
+window.self.addEventListener('install', function (event) {
+  event.waitUntil(preLoad());
 });
 
-// Cache and return requests
-self.addEventListener('fetch', (event) => {
+var preLoad = function () {
+  console.log('Installing web app');
+  return caches.open('offline').then(function (cache) {
+    console.log('caching index and important routes');
+    return cache.addAll(['/', '/offline.html']);
+  });
+};
+
+window.self.addEventListener('fetch', function (event) {
   event.respondWith(
-    caches.match(event.request).then(function (response) {
-      // Cache hit - return response
-      if (response) {
-        return response;
-      }
-      return fetch(event.request);
+    checkResponse(event.request).catch(function () {
+      return returnFromCache(event.request);
     })
   );
+  event.waitUntil(addToCache(event.request));
 });
 
-// Update a service worker
-self.addEventListener('activate', (event) => {
-  var cacheWhitelist = ['qr-pwa'];
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-});
+var checkResponse = function (request) {
+  return new Promise(function (fulfill, reject) {
+    fetch(request).then(function (response) {
+      if (response.status !== 404) {
+        fulfill(response);
+      } else {
+        reject();
+      }
+    }, reject);
+  });
+};
+
+var addToCache = function (request) {
+  return caches.open('offline').then(function (cache) {
+    return fetch(request).then(function (response) {
+      console.log(response.url + ' was cached');
+      return cache.put(request, response);
+    });
+  });
+};
+
+var returnFromCache = function (request) {
+  return caches.open('offline').then(function (cache) {
+    return cache.match(request).then(function (matching) {
+      if (!matching || matching.status == 404) {
+        return cache.match('offline.html');
+      } else {
+        return matching;
+      }
+    });
+  });
+};
