@@ -1,4 +1,4 @@
-window.self.addEventListener('install', function (event) {
+self.addEventListener('install', function (event) {
   event.waitUntil(preLoad());
 });
 
@@ -10,7 +10,7 @@ var preLoad = function () {
   });
 };
 
-window.self.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', function (event) {
   event.respondWith(
     checkResponse(event.request).catch(function () {
       return returnFromCache(event.request);
